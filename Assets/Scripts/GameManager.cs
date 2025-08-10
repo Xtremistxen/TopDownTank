@@ -1,74 +1,106 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// The Gamemanager has been set to a Singleton, that manages gloval game states.
-// Also including references to the current level and lists of the active controllers and pawns
-
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; } // The singleton
+    // Singleton (optional if you already have one)
+    public static GameManager Instance { get; private set; }
 
-    public Level currentLevel; // The reference to the current level
+    [Header("References")]
+    [SerializeField] private RoomManager roomManager;     // drag your RoomManager here
+    [SerializeField] private Camera mainCamera;            // optional: set follow target after spawn
 
-    // Below will list all of the active controllers and pawns which include the player and AI controllers
-    public List<Controller> allControllers = new List<Controller>();
-    public List<PlayerController> playerControllers = new List<PlayerController>();
-    public List<Pawn> allPawns = new List<Pawn>();
+    [Header("Prefabs")]
+    [SerializeField] private GameObject Tank;      // your Player Tank prefab
+    [SerializeField] private GameObject AITank;          // your AI Tank prefab (with AITankController)
 
-    void Awake() // This will enforce the singleton pattern
+    [Header("Spawn Settings")]
+    [SerializeField] private int aiCount = 3;
+    [SerializeField] private Vector2 roomSizeForFallback = new Vector2(20f, 12f); // match your RoomManager sizes
+    [SerializeField] private bool separateRooms = true;    // try to put each actor in a different room
+
+    private GameObject playerInstance;
+    private readonly List<GameObject> aiInstances = new();
+
+    void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // So it persistst across all scenes
+        // DontDestroyOnLoad(gameObject); // uncomment if you change scenes
     }
 
-    public void SetLevel(Level level) //sets an active level being called from the level script
+    void Start()
     {
-        currentLevel = level;
+        if (roomManager == null)
+            roomManager = FindObjectOfType<RoomManager>();
+
+        StartCoroutine(SpawnAfterGeneration());
     }
 
-    public void RegisterController(Controller controller) // Add a controller to the master list, player list and player controllers
+    private IEnumerator SpawnAfterGeneration()
     {
-        if (!allControllers.Contains(controller))
-            allControllers.Add(controller);
+        // wait until RoomManager finishes generating
+        while (roomManager != null && !roomManager.IsGenerationComplete)
+            yield return null;
 
-        if (controller is PlayerController player)
+        // Fetch rooms
+        List<Room> rooms = roomManager.GetAllRooms();
+        if (rooms == null || rooms.Count == 0)
         {
-            if (!playerControllers.Contains(player))
-                playerControllers.Add(player);
+            Debug.LogError("GameManager: No rooms available to spawn in!");
+            yield break;
+        }
+
+        // Pick distinct rooms if requested
+        List<Room> available = new List<Room>(rooms);
+
+        // Spawn Player
+        Room playerRoom = PickAndRemoveRandomRoom(available);
+        Vector3 playerPos = playerRoom.GetRandomSpawnPosition(roomSizeForFallback);
+        playerInstance = Instantiate(Tank, playerPos, Quaternion.identity);
+        playerInstance.tag = "Player"; // ensure tag is set for AI vision
+        // Optionally set camera follow
+        if (mainCamera == null) mainCamera = Camera.main;
+
+        // If you’re using Cinemachine, set the virtual camera’s Follow to playerInstance.transform instead.
+
+        // Spawn AIs
+        for (int i = 0; i < aiCount; i++)
+        {
+            Room aiRoom = separateRooms ? PickAndRemoveRandomRoom(available, fallbackRooms: rooms) : rooms[Random.Range(0, rooms.Count)];
+            if (aiRoom == null) aiRoom = rooms[Random.Range(0, rooms.Count)];
+
+            Vector3 aiPos = aiRoom.GetRandomSpawnPosition(roomSizeForFallback);
+            var ai = Instantiate(AITank, aiPos, Quaternion.identity);
+            aiInstances.Add(ai);
         }
     }
 
-    public void UnregisterController(Controller controller) // Removes the controller from relevant lists
+    private Room PickAndRemoveRandomRoom(List<Room> pool, List<Room> fallbackRooms = null)
     {
-        allControllers.Remove(controller);
-        if (controller is PlayerController player)
+        if (pool != null && pool.Count > 0)
         {
-            playerControllers.Remove(player);
+            int idx = Random.Range(0, pool.Count);
+            Room r = pool[idx];
+            pool.RemoveAt(idx);
+            return r;
         }
+        // fallback if pool exhausted
+        if (fallbackRooms != null && fallbackRooms.Count > 0)
+            return fallbackRooms[Random.Range(0, fallbackRooms.Count)];
+        return null;
     }
 
-    public void RegisterPawn(Pawn pawn) // Adds a pawn to the global list
+    internal void RegisterController(Controller controller)
     {
-        if (!allPawns.Contains(pawn))
-            allPawns.Add(pawn);
+        throw new System.NotImplementedException();
     }
 
-    public void UnregisterPawn(Pawn pawn)
+    internal void UnregisterController(Controller controller)
     {
-        allPawns.Remove(pawn);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L)) //Prints a debug ensuring the list works
-        {
-            Debug.Log($"Controllers: {allControllers.Count}, Players: {playerControllers.Count}, Pawns: {allPawns.Count}");
-        }
+        throw new System.NotImplementedException();
     }
 }
+
 

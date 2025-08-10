@@ -5,14 +5,14 @@ public class TankPawn : Pawn
 {
     private TankMover mover;
     private TankShooter shooter;
-    // private TankHealth health;   // Add this later if needed
+    private Health health;   
 
     private void Awake()
     {
 
-        mover = GetComponent<TankMover>(); // Cache compoent ref
+        mover = GetComponent<TankMover>(); 
         shooter = GetComponent<TankShooter>();
-        // health = GetComponent<TankHealth>(); ADD later
+        health = GetComponent<Health>();
     }
 
     public override void Move(float input)
@@ -35,11 +35,11 @@ public class TankPawn : Pawn
         }
     }
 
-    // public void TakeDamage(float amount)
-    // {
-    //     if (health != null)
-    //         health.TakeDamage(amount);
-    // }
+     public void TakeDamage(float amount)
+     {
+         if (health != null)
+             health.TakeDamage(amount);
+    }
 }
 
 

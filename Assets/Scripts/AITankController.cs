@@ -32,13 +32,13 @@ public class AITankController : MonoBehaviour
         SwitchState(GetComponent<PatrolState>());
     }
 
-    void Update()
+    void Update() // Updates the current state of the AI from AIstate
     {
         currentState?.UpdateState();
     }
 
 
-    public bool CanSeePlayer()
+    public bool CanSeePlayer() // A cone check if the player enters the field of view AI will engage
 {
     if (player == null) return false;
 
@@ -78,12 +78,12 @@ public class AITankController : MonoBehaviour
         return player != null ? Vector3.Distance(transform.position, player.position) : float.MaxValue;
     }
 
-    public float CurrentHealth()
+    public float CurrentHealth() // Current health before max or addons
     {
         return health != null ? health.currentHealth : 100f;
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected() // Shows where the AI is currently looking
 {
     Gizmos.color = Color.yellow;
 

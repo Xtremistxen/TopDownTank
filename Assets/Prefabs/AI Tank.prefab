@@ -357,6 +357,7 @@ GameObject:
   - component: {fileID: 4952921549319862064}
   - component: {fileID: -8119717410913083390}
   - component: {fileID: 8624688113990764903}
+  - component: {fileID: -6221119631833932183}
   m_Layer: 0
   m_Name: AI Tank
   m_TagString: AI
@@ -557,6 +558,7 @@ MonoBehaviour:
   shootRange: 8
   patrolPoints: []
   loopPatrol: 0
+  viewAngle: 90
 --- !u!114 &3552245659441568359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -633,6 +635,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   personality: 3
+--- !u!114 &-6221119631833932183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778359292463920332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bda3fdb9cc12c64aab2cb7cd0775100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 0}
+  shooter: {fileID: 0}
+  health: {fileID: 0}
 --- !u!1 &8847470845547254710
 GameObject:
   m_ObjectHideFlags: 0

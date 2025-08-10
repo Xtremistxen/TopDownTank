@@ -10,8 +10,8 @@ public abstract class AIState : MonoBehaviour
         controller = ctrl;
     }
 
-    public abstract void EnterState();
-    public abstract void ExitState();
-    public abstract void UpdateState();
+    public abstract void EnterState(); // first state is Idle and this will check if AI went to another state
+    public abstract void ExitState(); // When the AI leave a state to another
+    public abstract void UpdateState(); // updates the current state
 }
 

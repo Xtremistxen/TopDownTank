@@ -1,22 +1,24 @@
-using System.Diagnostics;
 using UnityEngine;
-// This is the base class for all of the controllers players and AI
-// and is responsible for controlling pawns
-// It does this by automaticlly register with the gamemanager
+
+// Base class for Player and AI controllers. Registers/unregisters with GameManager.
 public class Controller : MonoBehaviour
 {
-    protected virtual void Start()// Registers with the gamemanager
+    protected virtual void Start()
     {
-        GameManager.Instance.RegisterController(this);
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterController(this);
+        else
+            Debug.LogWarning($"{name}: GameManager.Instance is null; could not register Controller. " +
+                             "Ensure a GameManager is in the scene.");
     }
 
-    protected virtual void OnDestroy() // unregisters with the gamemanager
+    protected virtual void OnDestroy()
     {
-        GameManager.Instance.UnregisterController(this);
+        if (GameManager.Instance != null)
+            GameManager.Instance.UnregisterController(this);
     }
 
-    public virtual void ProcessInput()
-    {
-        
-    }
+    // For player input or AI logic to override if needed
+    public virtual void ProcessInput() { }
 }
+

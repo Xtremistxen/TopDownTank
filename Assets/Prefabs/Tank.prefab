@@ -299,8 +299,8 @@ GameObject:
   - component: {fileID: 917310355841718805}
   - component: {fileID: 780564832654661485}
   - component: {fileID: 5670983068577855238}
-  - component: {fileID: 8974045013851360964}
   - component: {fileID: 1555849380341962551}
+  - component: {fileID: 8445326316404023694}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Player
@@ -507,20 +507,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5965578134473190557, guid: f24f1781a22a202438f3408b0889f19e, type: 3}
   firePoint: {fileID: 5340955197553162758}
   fireRate: 1
---- !u!114 &8974045013851360964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6331319139828200700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48400e8e424bb914fab355075d9e151f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
 --- !u!114 &1555849380341962551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +519,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e03e9d8c6918d34185dc4e5b500327f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8445326316404023694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6331319139828200700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bda3fdb9cc12c64aab2cb7cd0775100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 0}
+  shooter: {fileID: 0}
+  health: {fileID: 0}
 --- !u!1 &6867289854523464816
 GameObject:
   m_ObjectHideFlags: 0

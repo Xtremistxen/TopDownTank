@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class TankMover : MonoBehaviour
-{
+{   // Tank Mover is the defaul movement for AI and player tanks
     public float moveSpeed = 5f;
     public float turnSpeed = 180f;
 

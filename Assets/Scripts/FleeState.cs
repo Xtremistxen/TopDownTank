@@ -7,7 +7,7 @@ public class FleeState : AIState
     public override void EnterState() { }
 
     public override void UpdateState()
-    {
+    {   // Will detect the player and begin to flee in a direction away from the player and stop if far away enough
         Vector3 dir = (controller.transform.position - controller.player.position).normalized;
         float angle = Vector3.SignedAngle(controller.transform.up, dir, Vector3.forward);
 
@@ -21,7 +21,7 @@ public class FleeState : AIState
         {
             controller.Mover.MoveForward();
         }
-
+        
         if (controller.CurrentHealth() > controller.fleeHealthThreshold &&
             controller.personality != AIPersonalityType.Coward)
         {

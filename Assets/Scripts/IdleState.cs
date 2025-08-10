@@ -3,7 +3,7 @@ using UnityEngine;
 public class IdleState : AIState
 {
 
-    //Most tanks will be in the idle such as sniper or if not patrolling
+    // Most tanks will be in the idle such as sniper or if not patrolling
     // Depending if the player is within range the AI will either chase or flee
     private float idleTimer = 0f;
     private float maxIdleTime = 3f;
@@ -14,15 +14,15 @@ public class IdleState : AIState
     }
 
     public override void UpdateState()
-    {
+    {   
         float distanceToPlayer = controller.DistanceToPlayer();
-
+         // coward will switch to flee mode when player gets close
         if (controller.personality == AIPersonalityType.Coward && distanceToPlayer < controller.visionRange)
         {
             controller.SwitchState(controller.GetComponent<FleeState>());
             return;
         }
-
+        // Agreeive will chase and engage player
         if (controller.personality == AIPersonalityType.Aggressor && distanceToPlayer < controller.visionRange)
         {
             controller.SwitchState(controller.GetComponent<ChaseState>());
